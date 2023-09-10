@@ -1,6 +1,21 @@
 import streamlit as st
 import openai
 import os
+from langchain import LLMChain
+from langchain.chat_models import ChatOpenAI
+from langchain.llms import OpenAI
+
+from langchain.agents import load_tools
+from langchain.agents import initialize_agent
+from langchain.agents import AgentType
+
+from langchain.prompts.chat import (
+    ChatPromptTemplate,
+    SystemMessagePromptTemplate,
+    HumanMessagePromptTemplate
+)
+
+
 
 # @st.cache_data(show_spinner=False)
 # def is_open_ai_key_valid(openai_api_key) -> bool:
@@ -46,8 +61,8 @@ if __name__ == "__main__":
             "Enter your OpenAI API key in the sidebar. You can get a key at"
             " https://platform.openai.com/account/api-keys."
         )
-    else:
-        openai.api_key = openai_api_key
+    # else:
+    #     openai.api_key = openai_api_key
 
     # uploaded_file = st.file_uploader(
     #     "Upload a pdf, docx, or txt file",
@@ -72,9 +87,23 @@ if __name__ == "__main__":
     # if not is_open_ai_key_valid(openai_api_key):
     #     st.stop()
 
-    response = openai.ChatCompletion.create(
-        model = "gpt-3.5-turbo",
-        messages = [{"role": "user", "content": "Hello"}]
-        )
+    # response = openai.ChatCompletion.create(
+    #     model = "gpt-3.5-turbo",
+    #     messages = [{"role": "user", "content": "Hello"}]
+    #     )
 
-    st.write(response)
+    # st.write(response)
+
+    chat = ChatOpenAI(openai_api_key = openai_api_key)
+
+    llm = OpenAI()
+
+    template = "tanslates {input_language} to {output_language}"
+    system_message_prompt = SystemMessagePromptTemplate.from_template(template)
+    human_template = "{text}"
+    human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+    chat_prompt = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
+
+    chain = LLMChain(llm=chat, prompt=chat_prompt)
+    res = chain.run(input_language="English", output_language="Korean", text = "I love programming.")
+    st.write(res)
