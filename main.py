@@ -61,6 +61,20 @@ if __name__ == "__main__":
             "Enter your OpenAI API key in the sidebar. You can get a key at"
             " https://platform.openai.com/account/api-keys."
         )
+    else:
+        chat = ChatOpenAI(openai_api_key = openai_api_key)
+
+        # llm = OpenAI()
+
+        template = "tanslates {input_language} to {output_language}"
+        system_message_prompt = SystemMessagePromptTemplate.from_template(template)
+        human_template = "{text}"
+        human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+        chat_prompt = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
+
+        chain = LLMChain(llm=chat, prompt=chat_prompt)
+        res = chain.run(input_language="English", output_language="Korean", text = "I love programming.")
+        st.write(res)
     # else:
     #     openai.api_key = openai_api_key
 
@@ -94,16 +108,4 @@ if __name__ == "__main__":
 
     # st.write(response)
 
-    chat = ChatOpenAI(openai_api_key = openai_api_key)
-
-    llm = OpenAI()
-
-    template = "tanslates {input_language} to {output_language}"
-    system_message_prompt = SystemMessagePromptTemplate.from_template(template)
-    human_template = "{text}"
-    human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
-    chat_prompt = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
-
-    chain = LLMChain(llm=chat, prompt=chat_prompt)
-    res = chain.run(input_language="English", output_language="Korean", text = "I love programming.")
-    st.write(res)
+    
