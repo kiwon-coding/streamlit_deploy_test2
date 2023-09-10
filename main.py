@@ -19,12 +19,7 @@ import os
 #         return False
 #     return True
 
-
-if __name__ == "__main__":
-    st.write("Hello")
-    st.write("OK")
-    st.write("how about this?")
-
+def load_api():
     api_key_input = st.text_input(
         "OpenAI API Key",
         type="password",
@@ -33,9 +28,16 @@ if __name__ == "__main__":
         value=os.environ.get("OPENAI_API_KEY", None)
         or st.session_state.get("OPENAI_API_KEY", ""),
     )
+    btn = st.button("Add")
+    if btn:
+        st.session_state["OPENAI_API_KEY"] = api_key_input
 
-    st.session_state["OPENAI_API_KEY"] = api_key_input
+if __name__ == "__main__":
+    st.write("Hello")
+    st.write("OK")
+    st.write("how about this?")
 
+    load_api()
 
     openai_api_key = st.session_state.get("OPENAI_API_KEY")
 
