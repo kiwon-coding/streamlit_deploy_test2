@@ -46,7 +46,8 @@ if __name__ == "__main__":
             "Enter your OpenAI API key in the sidebar. You can get a key at"
             " https://platform.openai.com/account/api-keys."
         )
-
+    else:
+        openai.api_key = openai_api_key
 
     # uploaded_file = st.file_uploader(
     #     "Upload a pdf, docx, or txt file",
